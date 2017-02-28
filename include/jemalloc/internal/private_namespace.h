@@ -390,6 +390,7 @@
 #define	opt_redzone JEMALLOC_N(opt_redzone)
 #define	opt_stats_print JEMALLOC_N(opt_stats_print)
 #define	opt_tcache JEMALLOC_N(opt_tcache)
+#define	opt_thp JEMALLOC_N(opt_thp)
 #define	opt_utrace JEMALLOC_N(opt_utrace)
 #define	opt_xmalloc JEMALLOC_N(opt_xmalloc)
 #define	opt_zero JEMALLOC_N(opt_zero)
