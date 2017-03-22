@@ -5,7 +5,16 @@
 /* Data. */
 
 bool		opt_thp = true;
-static bool	thp_initially_huge;
+#if defined(__ANDROID__)
+  #if defined(JEMALLOC_THP)
+    // Assume CONFIG_TRANSPARENT_HUGEPAGE_ALWAYS is enabled
+    static const bool	thp_initially_huge = true;
+  #else
+    static const bool	thp_initially_huge = false;
+  #endif
+#else
+  static bool	thp_initially_huge;
+#endif
 purge_mode_t	opt_purge = PURGE_DEFAULT;
 const char	*purge_mode_names[] = {
 	"ratio",
@@ -3765,6 +3774,7 @@ bin_info_init(void)
 #undef SC
 }
 
+#if !defined(__ANDROID__)
 static void
 init_thp_initially_huge(void) {
 	int fd;
@@ -3827,15 +3837,18 @@ init_thp_initially_huge(void) {
 label_error:
 	thp_initially_huge = false;
 }
+#endif
 
 void
 arena_boot(void)
 {
 	unsigned i;
 
+#if !defined(__ANDROID__)
 	if (config_thp && opt_thp) {
 		init_thp_initially_huge();
 	}
+#endif
 
 	arena_lg_dirty_mult_default_set(opt_lg_dirty_mult);
 	arena_decay_time_default_set(opt_decay_time);
